@@ -1,17 +1,17 @@
 import { useState, useRef } from "react";
 import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
-// import { Orbitcontrols } from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { useSpring, a } from "@react-spring/three";
-// extend({ Orbitcontrols });
+extend({ OrbitControls });
 
-// const Controls = () => {
-// 	const { camera, gl } = useThree();
-// 	const orbitRef = useRef();
-// 	useFrame(() => {
-// 		orbitRef.current.update();
-// 	});
-// 	return <orbitControls args={[camera, gl.domElement]} ref={orbitRef} />;
-// };
+const Controls = () => {
+	const { camera, gl } = useThree();
+	const orbitRef = useRef();
+	useFrame(() => {
+		orbitRef.current.update();
+	});
+	return <orbitControls args={[camera, gl.domElement]} ref={orbitRef} />;
+};
 
 const Box = () => {
 	const [hoverd, setHoverd] = useState(false);
@@ -40,7 +40,7 @@ function App() {
 	return (
 		<div className="App">
 			<Canvas>
-				{/* <Controls /> */}
+				<Controls />
 				<Box />
 			</Canvas>
 		</div>
