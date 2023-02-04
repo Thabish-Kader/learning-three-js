@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Canvas } from "react-three-fiber";
+import { useState, useRef } from "react";
+import { Canvas, useFrame } from "react-three-fiber";
 import { useSpring, a } from "@react-spring/three";
 function App() {
 	const Box = () => {
@@ -9,8 +9,14 @@ function App() {
 			scale: active ? [1.5, 1.5, 1.5] : [1, 1, 1],
 			color: hoverd ? "hotpink" : "grey",
 		});
+		const meshRef = useRef(null);
+
+		useFrame(() => {
+			meshRef.current.rotation.y += 0.01;
+		});
 		return (
 			<a.mesh
+				ref={meshRef}
 				onPointerOver={() => setHoverd(true)}
 				onPointerOut={() => setHoverd(false)}
 				onClick={() => setActive(!active)}
