@@ -10,7 +10,15 @@ const Controls = () => {
 	useFrame(() => {
 		orbitRef.current.update();
 	});
-	return <orbitControls args={[camera, gl.domElement]} ref={orbitRef} />;
+	return (
+		<orbitControls
+			autoRotate
+			maxPolarAngle={Math.PI / 3}
+			minPolarAngle={Math.PI / 3}
+			args={[camera, gl.domElement]}
+			ref={orbitRef}
+		/>
+	);
 };
 
 const Box = () => {
@@ -29,9 +37,10 @@ const Box = () => {
 			onClick={() => setActive(!active)}
 			scale={props.scale}
 		>
-			{/* <orbitcontrols /> */}
+			<ambientLight />
+			<spotLight />
 			<boxGeometry attach="geometry" args={[1, 1, 1]} />
-			<a.meshBasicMaterial attach="material" color={props.color} />
+			<a.meshPhysicalMaterial attach="material" color={props.color} />
 		</a.mesh>
 	);
 };
@@ -43,6 +52,7 @@ function App() {
 				<Controls />
 				<Box />
 			</Canvas>
+			<h1>Hello</h1>
 		</div>
 	);
 }
