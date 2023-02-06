@@ -1,5 +1,5 @@
 import * as THREE from "three";
-
+import gsap from "gsap";
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
@@ -55,4 +55,12 @@ const renderer = new THREE.WebGLRenderer({
 	canvas: canvas,
 });
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+const clock = new THREE.Clock();
+// animation
+gsap.to(group.position, { duration: 1, delay: 1, x: 2 });
+const tick = () => {
+	renderer.render(scene, camera);
+	window.requestAnimationFrame(tick);
+};
+tick();
