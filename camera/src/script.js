@@ -5,9 +5,28 @@ const canvas = document.querySelector("canvas.webgl");
 
 // Sizes
 const sizes = {
-	width: 800,
-	height: 600,
+	width: window.innerWidth,
+	height: window.innerHeight,
 };
+
+window.addEventListener("resize", () => {
+	sizes.width = window.innerWidth;
+	sizes.height = window.innerHeight;
+
+	camera.aspect = sizes.width / sizes.height;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize(sizes.width, sizes.height);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+window.addEventListener("dblclick", () => {
+	if (!document.fullscreenElement) {
+		canvas.requestFullscreen();
+	} else {
+		document.exitFullscreen();
+	}
+});
 
 // Scene
 const scene = new THREE.Scene();
@@ -61,15 +80,6 @@ const clock = new THREE.Clock();
 
 const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
-
-	// Update objects
-	// mesh.rotation.y = elapsedTime;
-
-	// update camera
-	// camera.position.x = Math.sin(cursor.x * Math.PI) * 3;
-	// camera.position.z = Math.cos(cursor.x * Math.PI) * 3;
-	// camera.position.y = cursor.y * 5;
-	// camera.lookAt(mesh.position);
 
 	controls.update();
 	// Render
