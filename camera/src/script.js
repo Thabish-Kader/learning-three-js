@@ -8,35 +8,21 @@ import gsap from "gsap";
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
-// debug
-const gui = new GUI();
-
-const parameters = {
-	spin: () => {
-		gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + 10 });
-	},
-};
-
 // Scene
 const scene = new THREE.Scene();
 
-/**
- * Object
- */
+// Object
+const material = new THREE.MeshBasicMaterial({ color: "red" });
+const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), material);
 
-const material = new THREE.MeshBasicMaterial({
-	color: 0xff0000,
-});
-
-const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
-scene.add(mesh);
-
-// debug
-gui.add(mesh.position, "x").min(-3).max(3).step(0.01).name("elevation");
-gui.add(mesh, "visible");
-gui.add(material, "wireframe");
-gui.addColor(material, "color");
-gui.add(parameters, "spin");
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material);
+sphere.position.x = -1.5;
+const torus = new THREE.Mesh(
+	new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+	material
+);
+torus.position.x = 1.5;
+scene.add(sphere, plane, torus);
 
 /**
  * Sizes
@@ -86,16 +72,24 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+const clock = new THREE.Clock();
 /**
  * Animate
  */
-const clock = new THREE.Clock();
 
 const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
-
 	// Update controls
 	controls.update();
+	sphere.rotation.y = 0.1 * elapsedTime;
+	torus.rotation.y = 0.1 * elapsedTime;
+	plane.rotation.y = 0.1 * elapsedTime;
+
+	sphere.rotation.x = 0.1 * elapsedTime;
+
+	torus.rotation.x = 0.1 * elapsedTime;
+
+	plane.rotation.x = 0.1 * elapsedTime;
 
 	// Render
 	renderer.render(scene, camera);
