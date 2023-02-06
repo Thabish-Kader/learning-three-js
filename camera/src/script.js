@@ -1,11 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-
+import GUI from "lil-gui";
 /**
  * Base
  */
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
+
+// debug
+const gui = new GUI();
 
 // Scene
 const scene = new THREE.Scene();
@@ -13,14 +16,6 @@ const scene = new THREE.Scene();
 /**
  * Object
  */
-// const geometry = new THREE.BufferGeometry();
-// const count = 50;
-// const positionsArray = new Float32Array(count * 3 * 3);
-// for (let i = 0; i < count * 3 * 3; i++) {
-// 	positionsArray[i] = (Math.random() - 0.5) * 4;
-// }
-// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
-// geometry.setAttribute("position", positionsAttribute);
 
 const material = new THREE.MeshBasicMaterial({
 	color: 0xff0000,
@@ -28,6 +23,11 @@ const material = new THREE.MeshBasicMaterial({
 
 const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
 scene.add(mesh);
+
+// debug
+gui.add(mesh.position, "x", -3, 3, 0.01);
+gui.add(mesh.position, "y", -3, 3, 0.01);
+gui.add(mesh.position, "z", -3, 3, 0.01);
 
 /**
  * Sizes
