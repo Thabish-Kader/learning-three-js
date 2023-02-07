@@ -16,19 +16,19 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 // axes
-const axes = new THREE.AxesHelper();
-scene.add(axes);
+// const axes = new THREE.AxesHelper();
+// scene.add(axes);
 
 /**
  * Textures
  */
 const texture = new THREE.TextureLoader();
-const matcapTexture = texture.load("/textures/matcaps/1.png");
+const matcapTexture = texture.load("/textures/matcaps/8.png");
 // fonts
 
 const fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-	const geometry = new TextGeometry("Hello three.js!", {
+	const geometry = new TextGeometry("Thabish Kader", {
 		font: font,
 		size: 0.5,
 		height: 0.2,
@@ -47,31 +47,29 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
 	// );
 	// alternate solution to center the geometry to center
 	geometry.center();
-	const textMaterial = new THREE.MeshMatcapMaterial({
+	const material = new THREE.MeshMatcapMaterial({
 		matcap: matcapTexture,
 	});
-	const text = new THREE.Mesh(geometry, textMaterial);
+	const text = new THREE.Mesh(geometry, material);
 	scene.add(text);
+	const donutGeometry = new THREE.SphereGeometry(0.3, 3, 2);
+
+	for (let i = 0; i < 100; i++) {
+		const donut = new THREE.Mesh(donutGeometry, material);
+		donut.position.x = (Math.random() - 0.5) * 10;
+		donut.position.y = (Math.random() - 0.5) * 10;
+		donut.position.z = (Math.random() - 0.5) * 10;
+		donut.rotation.x = Math.random() * Math.PI;
+		donut.rotation.y = Math.random() * Math.PI;
+		const scale = Math.random();
+		donut.scale.set(scale, scale, scale);
+
+		scene.add(donut);
+	}
 });
 /**
  * Object
  */
-
-const donutGeometry = new THREE.SphereGeometry(0.3, 3, 2);
-const donutMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture });
-
-for (let i = 0; i < 100; i++) {
-	const donut = new THREE.Mesh(donutGeometry, donutMaterial);
-	donut.position.x = (Math.random() - 0.5) * 10;
-	donut.position.y = (Math.random() - 0.5) * 10;
-	donut.position.z = (Math.random() - 0.5) * 10;
-	donut.rotation.x = Math.random() * Math.PI;
-	donut.rotation.y = Math.random() * Math.PI;
-	const scale = Math.random();
-	donut.scale.set(scale, scale, scale);
-
-	scene.add(donut);
-}
 
 /**
  * Sizes
