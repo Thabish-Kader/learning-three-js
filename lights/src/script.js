@@ -49,6 +49,23 @@ spotLight.position.set(0, 2, 3);
 scene.add(spotLight.target);
 scene.add(spotLight);
 spotLight.target.position.set(2, 0, 0);
+
+//light  helpers
+const hemisphereLightHelper = new THREE.HemisphereLightHelper(
+	hemisphereLight,
+	0.2
+);
+scene.add(hemisphereLightHelper);
+const directionalLightHelper = new THREE.DirectionalLightHelper(
+	directionalLight,
+	0.2
+);
+scene.add(directionalLightHelper);
+const pointLightHelper = new THREE.PointLightHelper(directionalLight, 0.2);
+scene.add(pointLightHelper);
+const spotLightHelper = new THREE.SpotLightHelper(spotLight, 0.2);
+scene.add(spotLightHelper);
+
 /**
  * Objects
  */
