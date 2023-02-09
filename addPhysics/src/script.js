@@ -23,7 +23,16 @@ debugObject.createBox = () => {
 		z: (Math.random() - 0.5) * 3,
 	});
 };
+debugObject.reset = () => {
+	for (const object of objectToUpdate) {
+		object.body.removeEventListener("collide", playHitSound);
+		world.removeBody(object.body);
+		// remove mesh
+		scene.remove(object.mesh);
+	}
+};
 gui.add(debugObject, "createBox");
+gui.add(debugObject, "reset");
 /**
  * Base
  */
@@ -48,9 +57,22 @@ const environmentMapTexture = cubeTextureLoader.load([
 	"/textures/environmentMaps/0/nz.png",
 ]);
 
+// Sounds
+const hitSounds = new Audio("/sounds/hit.mp3");
+const playHitSound = (collision) => {
+	const impactStrength = collision.contact.getImpactVelocityAlongNormal();
+	if (impactStrength > 1.5) {
+		hitSounds.volume = Math.random();
+		hitSounds.currentTime = 0;
+		hitSounds.play();
+	}
+};
+
 /* Physics */
 // world
 const world = new CANNON.World();
+world.broadphase = new CANNON.SAPBroadphase(world);
+world.allowSleep = true;
 world.gravity.set(0, -9.82, 0);
 
 // materials
@@ -186,6 +208,7 @@ const createSphere = (radius, position) => {
 		material: defaultMaterial,
 	});
 	body.position.copy(position);
+	body.addEventListener("collide", playHitSound);
 	world.addBody(body);
 	// save in object to update
 	objectToUpdate.push({ mesh: mesh, body: body });
@@ -217,6 +240,7 @@ const createBox = (width, height, depth, position) => {
 		material: defaultMaterial,
 	});
 	body.position.copy(position);
+	body.addEventListener("collide", playHitSound);
 	world.addBody(body);
 	// save in object to update
 	objectToUpdate.push({ mesh: mesh, body: body });
