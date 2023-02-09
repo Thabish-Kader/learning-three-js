@@ -22,6 +22,11 @@ parameters.count = 1000;
 parameters.size = 0.02;
 parameters.radius = 5;
 parameters.branches = 3;
+parameters.spin = 1;
+parameters.randomness = 0.2;
+parameters.randomnessPower = 3;
+parameters.insideColor = "#ff6030";
+parameters.outsideColor = "#1b3984";
 let geometry = null;
 let material = null;
 let points = null;
@@ -35,17 +40,36 @@ const generateGalaxy = () => {
 
 	geometry = new THREE.BufferGeometry();
 	const positions = new Float32Array(parameters.count * 3);
+
 	for (let i = 0; i < parameters.count; i++) {
 		const i3 = i * 3;
 		const radius = Math.random() * parameters.radius;
-		const branchAngle = (i % parameters.branches) / parameters.branches;
+		const spinAngle = radius * parameters.spin;
 
+		const randomX =
+			Math.pow(Math.random(), parameters.randomnessPower) *
+			(Math.random() < 0.5 ? 1 : -1) *
+			parameters.randomness *
+			radius;
+		const randomY =
+			Math.pow(Math.random(), parameters.randomnessPower) *
+			(Math.random() < 0.5 ? 1 : -1) *
+			parameters.randomness *
+			radius;
+		const randomZ =
+			Math.pow(Math.random(), parameters.randomnessPower) *
+			(Math.random() < 0.5 ? 1 : -1) *
+			parameters.randomness *
+			radius;
+		const branchAngle =
+			((i % parameters.branches) / parameters.branches) * Math.PI * 2;
 		if (i < 20) {
 			console.log(i, parameters.branches);
 		}
-		positions[i3 + 0] = radius;
-		positions[i3 + 1] = 0;
-		positions[i3 + 2] = 0;
+		positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+		positions[i3 + 1] = randomY;
+		positions[i3 + 2] =
+			Math.sin(branchAngle + spinAngle) * radius + randomZ;
 	}
 	geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 	// material
@@ -81,6 +105,23 @@ gui.add(parameters, "branches")
 	.max(20)
 	.step(1)
 	.onFinishChange(generateGalaxy);
+gui.add(parameters, "spin")
+	.min(-5)
+	.max(5)
+	.step(0.001)
+	.onFinishChange(generateGalaxy);
+gui.add(parameters, "randomness")
+	.min(0)
+	.max(2)
+	.step(0.001)
+	.onFinishChange(generateGalaxy);
+gui.add(parameters, "randomnessPower")
+	.min(1)
+	.max(10)
+	.step(0.001)
+	.onFinishChange(generateGalaxy);
+gui.addColor(parameters, "insideColor").onFinishChange(generateGalaxy);
+gui.addColor(parameters, "outsideColor").onFinishChange(generateGalaxy);
 /**
  * Sizes
  */
