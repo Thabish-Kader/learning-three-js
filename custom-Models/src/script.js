@@ -15,8 +15,13 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 // models
+let mixer = null;
 const gltfLoader = new GLTFLoader();
-gltfLoader.load("models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
+gltfLoader.load("models/Fox/glTF/Fox.gltf", (gltf) => {
+	mixer = new THREE.AnimationMixer(gltf.scene);
+	const action = mixer.clipAction(gltf.animations[1]);
+	action.play();
+	gltf.scene.scale.set(0.025, 0.025, 0.025);
 	scene.add(gltf.scene);
 });
 /**
@@ -112,6 +117,11 @@ const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
 	const deltaTime = elapsedTime - previousTime;
 	previousTime = elapsedTime;
+
+	// update mixer
+	if (mixer !== null) {
+		mixer.update(deltaTime);
+	}
 
 	// Update controls
 	controls.update();
